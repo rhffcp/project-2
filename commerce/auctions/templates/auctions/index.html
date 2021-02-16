@@ -3,5 +3,14 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% for listing in listings %}
+        <div class="card" style="width: 18rem; margin-top: 10px;">
+            <img src="{{ listing.image }}" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{ listing }}</h5>
+                <h6 class="card-subtitle mb-3">Price: ${{ listing.starting_bid }}</h6>
+                <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

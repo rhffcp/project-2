@@ -1,3 +1,6 @@
+# pylint: disable=no-member
+# pylint: disable=unused-wildcard-import
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -20,7 +23,9 @@ class ListingForm(forms.ModelForm):
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -79,8 +84,10 @@ def create(request):
     if request.method == "POST":
         form = ListingForm(request.POST)
         if form.is_valid():
-            # Find a way to save data as a new listing
-            pass
+            form.save()
+            return render(request, "auctions/create.html", {
+                "form": form
+            })
 
     return render(request, "auctions/create.html", {
         "form": ListingForm()
