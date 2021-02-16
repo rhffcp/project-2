@@ -11,11 +11,12 @@ from .models import *
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
-        fields = ['title', 'description', 'starting_bid', 'photo']
+        fields = ['title', 'description', 'starting_bid', 'image', 'category']
         widgets = {'title': forms.TextInput(attrs={'class': "form-control"}),
                    'description': forms.Textarea(attrs={'class': "form-control", 'style': "height: 200px"}),
                    'starting_bid': forms.NumberInput(attrs={'class': "form-control"}),
-                   'photo': forms.TextInput(attrs={'class': "form-control"})}
+                   'image': forms.TextInput(attrs={'class': "form-control"}),
+                   'category': forms.Select(attrs={'class': "form-control"})}
 
 
 def index(request):

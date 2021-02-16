@@ -8,23 +8,25 @@ class User(AbstractUser):
 # Model for each item listing.
 class Listing(models.Model):
     categories = [
-        ('FASH', 'Fashion'),
+        ('BOOK', 'Books'),
+        ('CLOTH', 'Clothing'),
         ('CHILD', 'Children'),
         ('ELEC', 'Electronics'),
-        ('HOME', 'Home'),
-        ('SER', 'Services'),
-        ('BOOK', 'Books'),
+        ('FURN', 'Furniture'),
+        ('KIT', 'Kitchen'),
         ('ART', 'Music/Arts'),
+        ('SER', 'Services'),
+        ('TOOL', 'Tools'),
         ('OTHER', 'Other')
     ]
 
     creation_date = models.DateTimeField()
-    title = models.CharField(max_length=64)
-    photo = models.URLField()
-    description = models.CharField(max_length=200)
-    starting_bid = models.FloatField()
+    title = models.CharField(max_length=100)
+    image = models.URLField("Image URL (optional)", null=True, blank=True)
+    description = models.CharField(max_length=300)
+    starting_bid = models.FloatField("Starting Bid")
     current_bid = models.FloatField()
-    category = models.CharField(choices=categories, max_length=5)
+    category = models.CharField("Category (optional)", choices=categories, max_length=5, null=True, blank=True)
     buyer = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField()
     
@@ -34,5 +36,5 @@ class Bid(models.Model):
 
 class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.CharField(max_length=200)
+    comment = models.CharField(max_length=300)
     date = models.DateTimeField()
