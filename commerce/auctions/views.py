@@ -16,7 +16,7 @@ class ListingForm(forms.ModelForm):
         model = Listing
         fields = ['title', 'description', 'starting_bid', 'image', 'category']
         widgets = {'title': forms.TextInput(attrs={'class': "form-control", 'placeholder': "Title"}),
-                   'description': forms.Textarea(attrs={'class': "form-control", 'style': "height: 200px", 'placeholder': "Description"}),
+                   'description': forms.Textarea(attrs={'class': "form-control", 'style': "height: 300px", 'placeholder': "Description"}),
                    'starting_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Starting Bid"}),
                    'category': forms.Select(attrs={'class': "form-control"})}
 
@@ -81,7 +81,9 @@ def register(request):
 
 def create(request):
     if request.method == "POST":
+        # Get form and file data and place it inside form variable.
         form = ListingForm(request.POST, request.FILES)
+        # If form is valid, save form data to model.
         if form.is_valid():
             form.save()
             # go to listing page
@@ -89,3 +91,4 @@ def create(request):
     return render(request, "auctions/create.html", {
         "form": ListingForm()
     })
+

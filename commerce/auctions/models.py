@@ -23,7 +23,8 @@ class Listing(models.Model):
 
     # creation_date = models.DateTimeField(null=True)
     title = models.CharField(max_length=100)
-    image = models.ImageField(null=True, blank=True)
+    # Images are uploaded to 'media/images/' directory path within project.
+    image = models.ImageField(upload_to="images/", null=True, blank=True)
     description = models.CharField(max_length=300)
     starting_bid = models.FloatField()
     # current_bid = models.FloatField()
