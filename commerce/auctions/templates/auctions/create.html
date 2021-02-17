@@ -1,13 +1,35 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    <style>
+        .form {
+            margin-bottom: 10px;
+        }
+    </style>
+
     <h2>Create New Listing</h2>
 
     <div style="margin-right: 500px;">
-        <form action="" method="post">
+        <form action="{% url 'create' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
-            {{ form }}
-            <input class="btn btn-primary btn-sm" style="margin-top: 10px;" type="submit" value="Save">
+            <div class="form">
+                {{ form.title }}
+            </div>
+            <div class="form">
+                {{ form.description }}
+            </div>
+            <div class="form">
+                {{ form.starting_bid }}
+            </div>
+            <div class="form">
+                {{ form.category }}
+            </div>
+            <div class="form">
+                Upload Image: {{ form.image }}
+            </div>
+            <div>
+                <input class="btn btn-primary btn-sm" type="submit" value="Save">
+            </div>
         </form>
     </div>
 {% endblock %}

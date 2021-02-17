@@ -8,25 +8,26 @@ class User(AbstractUser):
 # Model for each item listing.
 class Listing(models.Model):
     categories = [
-        ('a', 'Books'),
-        ('b', 'Clothing'),
-        ('c', 'Children'),
-        ('d', 'Electronics'),
-        ('e', 'Furniture'),
-        ('f', 'Kitchen'),
-        ('g', 'Music/Arts'),
-        ('h', 'Services'),
-        ('i', 'Tools'),
-        ('j', 'Other')
+        ('a', 'All Categories'),
+        ('b', 'Books'),
+        ('c', 'Clothing'),
+        ('d', 'Children'),
+        ('e', 'Electronics'),
+        ('f', 'Furniture'),
+        ('g', 'Kitchen'),
+        ('h', 'Music/Arts'),
+        ('i', 'Services'),
+        ('j', 'Tools'),
+        ('k', 'Other')
     ]
 
     # creation_date = models.DateTimeField(null=True)
     title = models.CharField(max_length=100)
-    image = models.URLField("Image URL (optional)", null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
     description = models.CharField(max_length=300)
-    starting_bid = models.FloatField("Starting Bid")
+    starting_bid = models.FloatField()
     # current_bid = models.FloatField()
-    category = models.CharField("Category (optional)", choices=categories, default=categories[9], max_length=1, null=True, blank=True)
+    category = models.CharField(choices=categories, default=categories[0], max_length=1, null=True, blank=True)
     # buyer = models.ForeignKey(User, on_delete=models.CASCADE)
     # status = models.BooleanField()
 
