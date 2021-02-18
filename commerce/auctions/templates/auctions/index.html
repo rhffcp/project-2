@@ -7,7 +7,9 @@
         <div class="card" style="width: 18rem; margin-top: 10px;">
         {% if listing.image %}
             <!-- research below -->
-            <img src="{{ listing.image.url }}">
+            <a href="{{ listing.id }}">
+                <img src="{{ listing.image.url }}" class="card-img-top">
+            </a>
         {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ listing }}</h5>

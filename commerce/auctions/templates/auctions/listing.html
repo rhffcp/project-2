@@ -1,7 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2></h2>
+    <h2>{{ listing.title }}</h2>
 
-    TODO
+    <!-- change image size -->
+    <img src="{{ listing.image.url }}">
+    <div>
+        {{ listing.description }}
+    </div>
+    <div>
+        Price: ${{ listing.starting_bid }}
+    </div>
 {% endblock %}
