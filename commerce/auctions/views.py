@@ -81,8 +81,10 @@ def register(request):
 
 def create(request):
     if request.method == "POST":
+
         # Get form and file data and place it inside form variable.
         form = ListingForm(request.POST, request.FILES)
+
         # If form is valid, save form data to model.
         if form.is_valid():
             form.save()
@@ -95,6 +97,33 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
+
+    if request.user.is_authenticated:
+        logged_in = True
+    else:
+        logged_in = False
+
+    if request.user in listing.watchers.all():
+        exist = True
+        added = True
+    else:
+        exist = False
+        added = False
+
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        "logged_in": logged_in,
+        "exist": exist,
+        "added": added
     })
+
+
+def edit_watchlist(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    if request.user in listing.watchers.all():
+        listing.watchers.remove(request.user)
+    else:
+        listing.watchers.add(request.user)
+    return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
+
+    

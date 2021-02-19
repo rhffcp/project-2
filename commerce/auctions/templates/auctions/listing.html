@@ -3,8 +3,30 @@
 {% block body %}
     <h2>{{ listing.title }}</h2>
 
-    <!-- change image size -->
-    <img src="{{ listing.image.url }}">
+    {% if logged_in %}
+        {% if added %}
+            <div class="alert alert-success" role="alert">
+                Item in Watchlist
+            </div>
+        {% else %}
+            <div class="alert alert-secondary" role="alert">
+                Item not in Watchlist
+            </div>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'edit_watchlist' listing.id %}">
+                {% if exist %}
+                    Remove from Watchlist
+                {% else %}
+                    Add to Watchlist
+                {% endif %}
+            </a>
+        </div>
+    {% endif %}
+    <div>
+        <img src="{{ listing.image.url }}">
+    </div>
     <div>
         {{ listing.description }}
     </div>

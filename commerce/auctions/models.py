@@ -31,6 +31,7 @@ class Listing(models.Model):
     category = models.CharField(choices=categories, default=categories[0], max_length=1, null=True, blank=True)
     # buyer = models.ForeignKey(User, on_delete=models.CASCADE)
     # status = models.BooleanField()
+    watchers = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return f"{self.title}"

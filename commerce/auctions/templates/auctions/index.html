@@ -1,18 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+
     <h2>Active Listings</h2>
 
     {% for listing in listings %}
         <div class="card" style="width: 18rem; margin-top: 10px;">
         {% if listing.image %}
             <!-- research below -->
-            <a href="{{ listing.id }}">
+            <a href="listing/{{ listing.id }}">
                 <img src="{{ listing.image.url }}" class="card-img-top">
             </a>
         {% endif %}
             <div class="card-body">
-                <h5 class="card-title">{{ listing }}</h5>
+                <a href="listing/{{ listing.id }}" style="color: black;">
+                    <h5 class="card-title">{{ listing }}</h5>
+                </a>
                 <h6 class="card-subtitle mb-3">Price: ${{ listing.starting_bid }}</h6>
                 <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
             </div>
