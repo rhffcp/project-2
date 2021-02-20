@@ -1,19 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        Error: Bid must be greater than current price.
+    </div>
+    {% elif bid_placed %}
+    <div class="alert alert-warning" role="alert">
+        Your bid is now the current price!
+    </div>
+    {% endif %}
     <h2>{{ listing.title }}</h2>
 
     {% if logged_in %}
-        {% if added %}
-            <div class="alert alert-success" role="alert">
-                Item in Watchlist
-            </div>
-        {% else %}
-            <div class="alert alert-secondary" role="alert">
-                Item not in Watchlist
-            </div>
-        {% endif %}
-
         <div>
             <a href="{% url 'edit_watchlist' listing.id %}">
                 {% if exist %}
@@ -24,13 +23,35 @@
             </a>
         </div>
     {% endif %}
+
     <div>
         <img src="{{ listing.image.url }}">
     </div>
     <div>
         {{ listing.description }}
     </div>
+
     <div>
-        Price: ${{ listing.starting_bid }}
+        {% if listing.current_bid is None %}
+            Price: ${{ listing.starting_bid }}
+        {% else %}
+            Price: ${{ listing.current_bid }}
+        {% endif %}
+        
     </div>
+
+    {% if logged_in %}
+        <div>
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+                <div>
+                    {{ form.new_bid }}
+                </div>
+                <div>
+                    <input class="btn btn-primary btn-sm" type="submit" value="Place Bid">
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
 {% endblock %}

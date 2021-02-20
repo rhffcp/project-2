@@ -27,7 +27,7 @@ class Listing(models.Model):
     image = models.ImageField(upload_to="images/", null=True, blank=True)
     description = models.CharField(max_length=300)
     starting_bid = models.FloatField()
-    # current_bid = models.FloatField()
+    current_bid = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=categories, default=categories[0], max_length=1, null=True, blank=True)
     # buyer = models.ForeignKey(User, on_delete=models.CASCADE)
     # status = models.BooleanField()
@@ -37,8 +37,11 @@ class Listing(models.Model):
         return f"{self.title}"
     
 class Bid(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     new_bid = models.FloatField()
+
+    
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

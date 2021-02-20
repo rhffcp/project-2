@@ -2,7 +2,7 @@
 
 {% block body %}
     <style>
-        .form {
+        form > div {
             margin-bottom: 10px;
         }
     </style>
@@ -13,19 +13,19 @@
         <!-- enctype attribute required to bind uploads to a form-->
         <form action="{% url 'create' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
-            <div class="form">
+            <div>
                 {{ form.title }}
             </div>
-            <div class="form">
+            <div>
                 {{ form.description }}
             </div>
-            <div class="form">
+            <div>
                 {{ form.starting_bid }}
             </div>
-            <div class="form">
+            <div>
                 {{ form.category }}
             </div>
-            <div class="form">
+            <div>
                 Upload Image: {{ form.image }}
             </div>
             <div>

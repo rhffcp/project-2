@@ -16,7 +16,13 @@
                 <a href="listing/{{ listing.id }}" style="color: black;">
                     <h5 class="card-title">{{ listing }}</h5>
                 </a>
-                <h6 class="card-subtitle mb-3">Price: ${{ listing.starting_bid }}</h6>
+                <h6 class="card-subtitle mb-3">
+                    {% if listing.current_bid is None %}
+                        Price: ${{ listing.starting_bid }}
+                    {% else %}
+                        Price: ${{ listing.current_bid }}
+                    {% endif %}
+                </h6>
                 <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
             </div>
         </div>

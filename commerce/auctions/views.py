@@ -20,6 +20,11 @@ class ListingForm(forms.ModelForm):
                    'starting_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Starting Bid"}),
                    'category': forms.Select(attrs={'class': "form-control"})}
 
+class BidForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['new_bid']
+        widgets = {'new_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Bid"})}
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -97,6 +102,8 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
+    error = False
+    bid_placed = False
 
     if request.user.is_authenticated:
         logged_in = True
@@ -110,11 +117,43 @@ def listing(request, listing_id):
         exist = False
         added = False
 
+    if request.method == "POST":
+        form = BidForm(request.POST)
+        if form.is_valid():
+            bid_num = form.cleaned_data["new_bid"]
+            if listing.current_bid is None:
+                if bid_num > listing.starting_bid:
+                    listing.current_bid = bid_num
+                    listing.save()
+                    new_bid = form.save()
+                    new_bid.listing = listing
+                    new_bid.user = request.user
+                    new_bid.save()
+                    bid_placed = True
+                else:
+                    error = True
+            else:
+                if bid_num > listing.current_bid:
+                    listing.current_bid = bid_num
+                    listing.save()
+                    new_bid = form.save()
+                    new_bid.listing = listing
+                    new_bid.user = request.user
+                    new_bid.save()
+                    bid_placed = True
+                else:
+                    error = True
+            
+
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "logged_in": logged_in,
         "exist": exist,
-        "added": added
+        "added": added,
+        "form": BidForm(),
+        "error": error,
+        "bid_placed": bid_placed
     })
 
 
