@@ -92,8 +92,10 @@ def create(request):
 
         # If form is valid, save form data to model.
         if form.is_valid():
-            form.save()
-            # go to listing page
+            creation = form.save()
+            creation.creator = request.user
+            creation.save()
+            # go to listing page or creation success alert
 
     return render(request, "auctions/create.html", {
         "form": ListingForm()
@@ -104,6 +106,8 @@ def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     error = False
     bid_placed = False
+    user = request.user
+    winner = listing.top_bidder
 
     if request.user.is_authenticated:
         logged_in = True
@@ -124,6 +128,7 @@ def listing(request, listing_id):
             if listing.current_bid is None:
                 if bid_num > listing.starting_bid:
                     listing.current_bid = bid_num
+                    listing.top_bidder = request.user
                     listing.save()
                     new_bid = form.save()
                     new_bid.listing = listing
@@ -135,6 +140,7 @@ def listing(request, listing_id):
             else:
                 if bid_num > listing.current_bid:
                     listing.current_bid = bid_num
+                    listing.top_bidder = request.user
                     listing.save()
                     new_bid = form.save()
                     new_bid.listing = listing
@@ -153,7 +159,9 @@ def listing(request, listing_id):
         "added": added,
         "form": BidForm(),
         "error": error,
-        "bid_placed": bid_placed
+        "bid_placed": bid_placed,
+        "user": user,
+        "winner": winner
     })
 
 
@@ -166,3 +174,8 @@ def edit_watchlist(request, listing_id):
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
 
     
+def winner(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    listing.status = False
+    listing.save()
+    return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))

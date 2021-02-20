@@ -30,7 +30,9 @@ class Listing(models.Model):
     current_bid = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=categories, default=categories[0], max_length=1, null=True, blank=True)
     # buyer = models.ForeignKey(User, on_delete=models.CASCADE)
-    # status = models.BooleanField()
+    top_bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder", blank=True, null=True)
+    status = models.BooleanField(default=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True, null=True)
     watchers = models.ManyToManyField(User, blank=True)
 
     def __str__(self):

@@ -1,57 +1,76 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {% if error %}
-    <div class="alert alert-danger" role="alert">
-        Error: Bid must be greater than current price.
-    </div>
-    {% elif bid_placed %}
-    <div class="alert alert-warning" role="alert">
-        Your bid is now the current price!
-    </div>
-    {% endif %}
-    <h2>{{ listing.title }}</h2>
-
-    {% if logged_in %}
-        <div>
-            <a href="{% url 'edit_watchlist' listing.id %}">
-                {% if exist %}
-                    Remove from Watchlist
-                {% else %}
-                    Add to Watchlist
-                {% endif %}
-            </a>
+    {% if listing.status == False %}
+    <!-- add option for deleting listing if user is creator. -->
+        <div class="alert alert-danger" role="alert">
+            Listing closed. User: "{{ winner }}" is the winner.
         </div>
-    {% endif %}
-
-    <div>
-        <img src="{{ listing.image.url }}">
-    </div>
-    <div>
-        {{ listing.description }}
-    </div>
-
-    <div>
-        {% if listing.current_bid is None %}
-            Price: ${{ listing.starting_bid }}
-        {% else %}
-            Price: ${{ listing.current_bid }}
+    {% else %}
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                Error: Bid must be greater than current price.
+            </div>
+        {% elif bid_placed %}
+            <div class="alert alert-warning" role="alert">
+                Your bid is now the current price!
+            </div>
         {% endif %}
-        
-    </div>
 
-    {% if logged_in %}
+        <h2>{{ listing.title }}</h2>
+
+        {% if logged_in %}
+            {% if user != listing.creator %}
+            <!-- add option for deleting listing if user is creator. -->
+                <div>
+                    <a href="{% url 'edit_watchlist' listing.id %}">
+                        {% if exist %}
+                            Remove from Watchlist
+                        {% else %}
+                            Add to Watchlist
+                        {% endif %}
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+
         <div>
-            <form action="{% url 'listing' listing.id %}" method="post">
-                {% csrf_token %}
-                <div>
-                    {{ form.new_bid }}
-                </div>
-                <div>
-                    <input class="btn btn-primary btn-sm" type="submit" value="Place Bid">
-                </div>
-            </form>
+            <img src="{{ listing.image.url }}">
         </div>
-    {% endif %}
+        <div>
+            {{ listing.description }}
+        </div>
+        <div>
+            {% if listing.current_bid is None %}
+                Price: ${{ listing.starting_bid }}
+            {% else %}
+                Price: ${{ listing.current_bid }}
+            {% endif %}
+        </div>
 
+        {% if logged_in %}
+            {% if user != listing.creator %}
+                <div>
+                    <form action="{% url 'listing' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            {{ form.new_bid }}
+                        </div>
+                        <div>
+                            <input class="btn btn-primary btn-sm" type="submit" value="Place Bid">
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <div>
+                    <form action="{% url 'winner' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            <input class="btn btn-primary btn-sm" type="submit" value="Close Auction">
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
 {% endblock %}
