@@ -12,6 +12,7 @@
                 Error: Bid must be greater than current price.
             </div>
         {% elif bid_placed %}
+        <!-- add option for user to undo their bid. in a view use listing.current_bid = Bid.objects.filter(listing=listing).last().new_bid -->
             <div class="alert alert-warning" role="alert">
                 Your bid is now the current price!
             </div>
