@@ -176,6 +176,7 @@ def edit_watchlist(request, listing_id):
     
 def winner(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
+    listing.top_bidder = Bid.objects.filter(listing=listing).last().user
     listing.status = False
     listing.save()
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
