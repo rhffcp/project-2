@@ -6,12 +6,10 @@
 
     {% for listing in listings %}
         <div class="card" style="width: 18rem; margin-top: 10px;">
-        {% if listing.image %}
-            <!-- research below -->
-            <a href="listing/{{ listing.id }}">
-                <img src="{{ listing.image.url }}" class="card-img-top">
-            </a>
-        {% endif %}
+        <!-- research below -->
+        <a href="listing/{{ listing.id }}">
+            <img src="{{ listing.image.url }}" class="card-img-top">
+        </a>
             <div class="card-body">
                 <a href="listing/{{ listing.id }}" style="color: black;">
                     <h5 class="card-title">{{ listing }}</h5>

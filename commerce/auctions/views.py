@@ -10,7 +10,7 @@ from django import forms
 
 from .models import *
 
-
+# add option for more than one photo and option for deleting upload.
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing

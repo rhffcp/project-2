@@ -2,10 +2,18 @@
 
 {% block body %}
     {% if listing.status == False %}
-    <!-- add option for deleting listing if user is creator. -->
-        <div class="alert alert-danger" role="alert">
-            Listing closed. User: "{{ winner }}" is the winner.
-        </div>
+        {% if user != winner %}
+            <!-- add option for deleting listing if user is creator. -->
+            <div class="alert alert-danger" role="alert">
+                Listing closed. User: "{{ winner }}" is the winner.
+            </div>
+        {% endif %}
+   
+        {% if user == winner %}
+            <div class="alert alert-success" role="alert">
+                Congratulations! You are the winner for this listing!
+            </div>
+        {% endif %}
     {% else %}
         {% if error %}
             <div class="alert alert-danger" role="alert">
@@ -63,6 +71,7 @@
                     </form>
                 </div>
             {% else %}
+            <!-- add option for creator to edit title description price or photo. -->
                 <div>
                     <form action="{% url 'winner' listing.id %}" method="post">
                         {% csrf_token %}
