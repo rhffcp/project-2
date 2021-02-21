@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django.contrib.humanize', # Useful for human touch features like adding commas after every three digits.
     'django_cleanup', # From 'pip install django-cleanup' - removes media files when models are deleted.
 ]
 

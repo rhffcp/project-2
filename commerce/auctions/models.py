@@ -9,15 +9,17 @@ class User(AbstractUser):
 class Listing(models.Model):
     categories = [
         ('a', 'Books'),
-        ('b', 'Clothing'),
-        ('c', 'Children'),
-        ('d', 'Electronics'),
-        ('e', 'Furniture'),
-        ('f', 'Kitchen'),
-        ('g', 'Music/Arts'),
-        ('h', 'Services'),
-        ('i', 'Tools'),
-        ('j', 'Other')
+        ('b', 'Children'),
+        ('c', 'Clothing'),
+        ('d', 'Decoration'),
+        ('e', 'Electronics'),
+        ('f', 'Furniture'),
+        ('g', 'Kitchen'),
+        ('h', 'Music/Arts'),
+        ('i', 'Services'),
+        ('j', 'Tools'),
+        ('k', 'Vehicles'),
+        ('l', 'Other')
     ]
 
     # creation_date = models.DateTimeField(null=True)
