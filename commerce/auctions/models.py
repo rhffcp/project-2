@@ -44,6 +44,10 @@ class Bid(models.Model):
     
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.CharField(max_length=300)
-    date = models.DateTimeField()
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null=True, related_name="comments")
+    # date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.comment}"

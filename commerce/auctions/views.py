@@ -26,6 +26,13 @@ class BidForm(forms.ModelForm):
         fields = ['new_bid']
         widgets = {'new_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Bid"})}
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+        widgets = {'comment': forms.Textarea(attrs={'class': "form-control", 'style': "height: 100px", 'placeholder': "Comment"})}
+
+
 def index(request):
     return render(request, "auctions/index.html", {
         "listings": Listing.objects.all()
@@ -161,7 +168,9 @@ def listing(request, listing_id):
         "error": error,
         "bid_placed": bid_placed,
         "user": user,
-        "winner": winner
+        "winner": winner,
+        "comment_form": CommentForm(),
+        "comments": listing.comments.all(),
     })
 
 
@@ -179,4 +188,17 @@ def winner(request, listing_id):
     listing.top_bidder = Bid.objects.filter(listing=listing).last().user
     listing.status = False
     listing.save()
+    return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
+
+
+def comments(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            comment.listing = listing
+            comment.user = request.user
+            comment.save()
+
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))

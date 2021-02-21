@@ -81,6 +81,36 @@
                     </form>
                 </div>
             {% endif %}
+
+            <div>
+                <form action="{% url 'comments' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        {{ comment_form.comment }}
+                    </div>
+                    <div>
+                        <input class="btn btn-primary btn-sm" type="submit" value="Comment">
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <h3>All Comments</h3>
+    
+                {% if comments %}
+                    <div>
+                        {% for comment in comments %}
+                            <div>
+                                {{ comment.user }}: {{ comment }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div>
+                        No comments.
+                    </div>
+                {% endif %}
+            </div>
         {% endif %}
     {% endif %}
 {% endblock %}
