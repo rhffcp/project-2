@@ -2,6 +2,7 @@
 # pylint: disable=unused-wildcard-import
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -111,10 +112,11 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
-    error = False
+    bid_error = False
     bid_placed = False
     user = request.user
     winner = listing.top_bidder
+    access_error = False
 
     if request.user.is_authenticated:
         logged_in = True
@@ -122,57 +124,65 @@ def listing(request, listing_id):
         logged_in = False
 
     if request.user in listing.watchers.all():
-        exist = True
-        added = True
+        watcher_exists = True
     else:
-        exist = False
-        added = False
+        watcher_exists = False
+
 
     if request.method == "POST":
-        form = BidForm(request.POST)
-        if form.is_valid():
-            bid_num = form.cleaned_data["new_bid"]
-            if listing.current_bid is None:
-                if bid_num > listing.starting_bid:
-                    listing.current_bid = bid_num
-                    listing.top_bidder = request.user
-                    listing.save()
-                    new_bid = form.save()
-                    new_bid.listing = listing
-                    new_bid.user = request.user
-                    new_bid.save()
-                    bid_placed = True
+        if logged_in:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save()
+                comment.listing = listing
+                comment.user = request.user
+                comment.save()
+                
+            form = BidForm(request.POST)
+            if form.is_valid():
+                bid_num = form.cleaned_data["new_bid"]
+                if listing.current_bid is None:
+                    if bid_num > listing.starting_bid:
+                        listing.current_bid = bid_num
+                        listing.top_bidder = request.user
+                        listing.save()
+                        new_bid = form.save()
+                        new_bid.listing = listing
+                        new_bid.user = request.user
+                        new_bid.save()
+                        bid_placed = True
+                    else:
+                        bid_error = True
                 else:
-                    error = True
-            else:
-                if bid_num > listing.current_bid:
-                    listing.current_bid = bid_num
-                    listing.top_bidder = request.user
-                    listing.save()
-                    new_bid = form.save()
-                    new_bid.listing = listing
-                    new_bid.user = request.user
-                    new_bid.save()
-                    bid_placed = True
-                else:
-                    error = True
+                    if bid_num > listing.current_bid:
+                        listing.current_bid = bid_num
+                        listing.top_bidder = request.user
+                        listing.save()
+                        new_bid = form.save()
+                        new_bid.listing = listing
+                        new_bid.user = request.user
+                        new_bid.save()
+                        bid_placed = True
+                    else:
+                        bid_error = True
+        else:
+            access_error = True
             
 
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "logged_in": logged_in,
-        "exist": exist,
-        "added": added,
+        "watcher_exists": watcher_exists,
         "form": BidForm(),
-        "error": error,
+        "bid_error": bid_error,
         "bid_placed": bid_placed,
         "user": user,
         "winner": winner,
         "comment_form": CommentForm(),
         "comments": listing.comments.all(),
+        "access_error": access_error,
     })
-
 
 def edit_watchlist(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
@@ -191,14 +201,3 @@ def winner(request, listing_id):
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
 
 
-def comments(request, listing_id):
-    listing = Listing.objects.get(id=listing_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save()
-            comment.listing = listing
-            comment.user = request.user
-            comment.save()
-
-    return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))

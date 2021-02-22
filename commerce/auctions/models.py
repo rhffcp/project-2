@@ -16,10 +16,11 @@ class Listing(models.Model):
         ('f', 'Furniture'),
         ('g', 'Kitchen'),
         ('h', 'Music/Arts'),
-        ('i', 'Services'),
-        ('j', 'Tools'),
-        ('k', 'Vehicles'),
-        ('l', 'Other')
+        ('i', 'Office'),
+        ('j', 'Services'),
+        ('k', 'Tools'),
+        ('l', 'Vehicles'),
+        ('m', 'Other')
     ]
 
     # creation_date = models.DateTimeField(null=True)
