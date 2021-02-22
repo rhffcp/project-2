@@ -123,6 +123,9 @@ def listing(request, listing_id):
     winner = listing.top_bidder
     access_error = False
 
+    if listing.top_bidder is None:
+        winner = "None"
+
     if request.user.is_authenticated:
         logged_in = True
     else:
@@ -198,9 +201,13 @@ def edit_watchlist(request, listing_id):
 
 def winner(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
-    listing.top_bidder = Bid.objects.filter(listing=listing).last().user
-    listing.status = False
-    listing.save()
+    if listing.top_bidder is not None:
+        listing.top_bidder = Bid.objects.filter(listing=listing).last().user
+        listing.status = False
+        listing.save()
+    else:
+        listing.status = False
+        listing.save()
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
 
 

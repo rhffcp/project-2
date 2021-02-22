@@ -14,10 +14,14 @@
     </style>
 
     {% if listing.status == False %}
-        {% if user != winner %}
+        {% if user != winner and winner != "None" %}
             <!-- add option for deleting listing if user is creator. -->
             <div class="alert alert-info" role="alert">
                 Listing closed. User "{{ winner }}" is the winner.
+            </div>
+        {% elif user != winner and winner == "None" %}
+            <div class="alert alert-info" role="alert">
+                Listing closed. There is no winner for this listing.
             </div>
         {% else %}
             <div class="alert alert-success" role="alert">
@@ -93,14 +97,12 @@
                         {% endif %}
 
                         {% if user == listing.creator %}
-                            {% if winner is not None %}
                             <form action="{% url 'winner' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <div>
                                     <input class="btn btn-outline-danger btn-sm btn-block" type="submit" value="Close Auction">
                                 </div>
                             </form>
-                            {% endif %}
                             <!-- add option for creator to edit title description price or photo. -->
 
                         {% endif %}
@@ -113,10 +115,10 @@
             <div class="col">
                 <form action="{% url 'listing' listing.id %}" method="post">
                     {% csrf_token %}
-                    <div style="margin-bottom: 5px;">
+                    <div style="margin-bottom: 10px;">
                         {{ comment_form.comment }}
                     </div>
-                    <div style="margin-bottom: 5px; text-align: right;">
+                    <div style="margin-bottom: 10px; text-align: right;">
                         <input class="btn btn-outline-primary btn-sm" type="submit" value="Comment">
                     </div>
                 </form>
