@@ -9,8 +9,8 @@
 
     <h2>Create New Listing</h2>
 
-    <div style="margin-right: 500px;">
-        <!-- enctype attribute required to bind uploads to a form-->
+    <div>
+        <!-- enctype attribute required to bind file uploads to a form-->
         <form action="{% url 'create' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
             <div>

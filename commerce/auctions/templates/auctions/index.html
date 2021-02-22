@@ -2,43 +2,43 @@
 {% load humanize %}
 
 {% block body %}
-<style>
-    .card {
-        border: none;
-    }
+    <style>
+        .card {
+            border: none;
+        }
 
-    .card-img-top {
-        height: 200px;
-        object-fit: contain;
-    }
-</style>
+        .card-img-top {
+            height: 200px;
+            object-fit: contain;
+        }
+    </style>
 
-<h2>Active Listings</h2>
+    <h2>Active Listings</h2>
 
-<div class="row">
-    {% for listing in listings %}
-    <div class="col-lg-2 col-md-3 col-sm-4">
-        <div class="card h-100">
-            <a href="listing/{{ listing.id }}">
-                <img src="{{ listing.image.url }}" class="card-img-top">
-            </a>
-            <div class="card-body">
-                <a href="listing/{{ listing.id }}" style="color: black;">
-                    <h5 class="card-title">{{ listing }}</h5>
-                </a>
-                <h6 class="card-subtitle mb-3">
-                    {% if listing.current_bid is None %}
-                    ${{ listing.starting_bid|intcomma }}
-                    {% else %}
-                    ${{ listing.current_bid|intcomma }}
-                    {% endif %}
-                </h6>
-                <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+    <div class="row">
+        {% for listing in listings %}
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                <div class="card h-100">
+                    <a href="listing/{{ listing.id }}">
+                        <img src="{{ listing.image.url }}" class="card-img-top">
+                    </a>
+                    <div class="card-body">
+                        <a href="listing/{{ listing.id }}" style="color: black;">
+                            <h5 class="card-title">{{ listing }}</h5>
+                        </a>
+                        <h6 class="card-subtitle mb-3">
+                            {% if listing.current_bid is None %}
+                                ${{ listing.starting_bid|intcomma }}
+                            {% else %}
+                                ${{ listing.current_bid|intcomma }}
+                            {% endif %}
+                        </h6>
+                        <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
 
 {% endblock %}

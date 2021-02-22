@@ -2,7 +2,6 @@
 # pylint: disable=unused-wildcard-import
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -12,6 +11,8 @@ from django import forms
 from .models import *
 
 # add option for more than one photo and option for deleting upload.
+
+
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
@@ -21,17 +22,21 @@ class ListingForm(forms.ModelForm):
                    'starting_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Starting Bid"}),
                    'category': forms.Select(attrs={'class': "form-control"})}
 
+
 class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
         fields = ['new_bid']
-        widgets = {'new_bid': forms.NumberInput(attrs={'class': "form-control", 'placeholder': "Bid"})}
+        widgets = {'new_bid': forms.NumberInput(
+            attrs={'class': "form-control", 'placeholder': "Bid"})}
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
-        widgets = {'comment': forms.Textarea(attrs={'class': "form-control", 'style': "height: 100px", 'placeholder': "Comment"})}
+        widgets = {'comment': forms.Textarea(
+            attrs={'class': "form-control", 'style': "height: 100px", 'placeholder': "Comment"})}
 
 
 def index(request):
@@ -128,7 +133,6 @@ def listing(request, listing_id):
     else:
         watcher_exists = False
 
-
     if request.method == "POST":
         if logged_in:
             form = CommentForm(request.POST)
@@ -137,7 +141,7 @@ def listing(request, listing_id):
                 comment.listing = listing
                 comment.user = request.user
                 comment.save()
-                
+
             form = BidForm(request.POST)
             if form.is_valid():
                 bid_num = form.cleaned_data["new_bid"]
@@ -167,8 +171,6 @@ def listing(request, listing_id):
                         bid_error = True
         else:
             access_error = True
-            
-
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -184,6 +186,7 @@ def listing(request, listing_id):
         "access_error": access_error,
     })
 
+
 def edit_watchlist(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     if request.user in listing.watchers.all():
@@ -192,7 +195,7 @@ def edit_watchlist(request, listing_id):
         listing.watchers.add(request.user)
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
 
-    
+
 def winner(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     listing.top_bidder = Bid.objects.filter(listing=listing).last().user
@@ -201,3 +204,9 @@ def winner(request, listing_id):
     return HttpResponseRedirect(reverse("listing", kwargs={'listing_id': listing_id}))
 
 
+def watchlist(request):
+    listings = request.user.watchlist.all()
+
+    return render(request, "auctions/watchlist.html", {
+        "listings": listings
+    })

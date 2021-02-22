@@ -1,140 +1,140 @@
 {% extends "auctions/layout.html" %}
-
-{% block body %}
 {% load humanize %}
 
-<style>
-    img {
-        height: 400px;
-    }
-    .row > div {
-        padding: 20px;
-        /* border: 2px solid black; */
-    }
-</style>
+{% block body %}
 
-{% if listing.status == False %}
-    {% if user != winner %}
-        <!-- add option for deleting listing if user is creator. -->
-        <div class="alert alert-info" role="alert">
-            Listing closed. User "{{ winner }}" is the winner.
+    <style>
+        img {
+            height: 400px;
+        }
+        .row > div {
+            padding: 20px;
+            /* border: 2px solid black; */
+        }
+    </style>
+
+    {% if listing.status == False %}
+        {% if user != winner %}
+            <!-- add option for deleting listing if user is creator. -->
+            <div class="alert alert-info" role="alert">
+                Listing closed. User "{{ winner }}" is the winner.
+            </div>
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                Congratulations! You are the winner for this listing!
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if bid_error %}
+        <div class="alert alert-danger" role="alert">
+            ERROR: Bid must be greater than current price.
         </div>
-    {% else %}
-        <div class="alert alert-success" role="alert">
-            Congratulations! You are the winner for this listing!
+    {% elif bid_placed %}
+        <!-- add option for user to undo their bid. in a view use listing.current_bid = Bid.objects.filter(listing=listing).last().new_bid -->
+        <div class="alert alert-warning" role="alert">
+            Your bid is now the current price!
         </div>
     {% endif %}
-{% endif %}
 
-{% if bid_error %}
-    <div class="alert alert-danger" role="alert">
-        ERROR: Bid must be greater than current price.
-    </div>
-{% elif bid_placed %}
-    <!-- add option for user to undo their bid. in a view use listing.current_bid = Bid.objects.filter(listing=listing).last().new_bid -->
-    <div class="alert alert-warning" role="alert">
-        Your bid is now the current price!
-    </div>
-{% endif %}
-
-{% if access_error %}
-    <div class="alert alert-danger" role="alert">
-        ERROR: You must be logged in to access this feature.
-    </div>
-{% endif %}
-
-<h2>{{ listing.title }}</h2>
-
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8">
-            <img src="{{ listing.image.url }}">
+    {% if access_error %}
+        <div class="alert alert-danger" role="alert">
+            ERROR: You must be logged in to access this feature.
         </div>
-        <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        {% if listing.current_bid is None %}
-                            ${{ listing.starting_bid|intcomma }}
-                        {% else %}
-                            ${{ listing.current_bid|intcomma }}
-                        {% endif %}
-                    </h5>
+    {% endif %}
 
-                    <p class="card-text">{{ listing.description }}</p>
+    <h2>{{ listing.title }}</h2>
 
-                    <form action="{% url 'listing' listing.id %}" method="post">
-                        {% csrf_token %}
-                        <div style="margin-bottom: 5px;">
-                            {{ form.new_bid }}
-                        </div>
-                        <div style="margin-bottom: 5px;">
-                            <input class="btn btn-primary btn-sm btn-block" type="submit" value="Place Bid">
-                        </div>
-                    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <img src="{{ listing.image.url }}">
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if listing.current_bid is None %}
+                                ${{ listing.starting_bid|intcomma }}
+                            {% else %}
+                                ${{ listing.current_bid|intcomma }}
+                            {% endif %}
+                        </h5>
 
-                    {% if not logged_in %}
+                        <p class="card-text">{{ listing.description }}</p>
+
                         <form action="{% url 'listing' listing.id %}" method="post">
                             {% csrf_token %}
-                            <input class="btn btn-outline-success btn-sm btn-block" type="submit" value="Add to Watchlist">
+                            <div style="margin-bottom: 5px;">
+                                {{ form.new_bid }}
+                            </div>
+                            <div style="margin-bottom: 5px;">
+                                <input class="btn btn-primary btn-sm btn-block" type="submit" value="Place Bid">
+                            </div>
                         </form>
-                    {% else %}
-                        <a href="{% url 'edit_watchlist' listing.id %}">
-                            {% if watcher_exists %}
-                            <div style="margin-bottom: 5px;">
-                                <input class="btn btn-outline-dark btn-sm btn-block" type="submit" value="Remove from Watchlist">
-                            </div>
-                            {% else %}
-                            <div style="margin-bottom: 5px;">
-                                <input class="btn btn-outline-success btn-sm btn-block" type="submit" value="Add to Watchlist">
-                            </div>
-                            {% endif %}
-                        </a>
-                    {% endif %}
 
-                    {% if user == listing.creator %}
-                        <!-- add option for creator to edit title description price or photo. -->
-                        <form action="{% url 'winner' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <div>
-                                <input class="btn btn-outline-danger btn-sm btn-block" type="submit" value="Close Auction">
-                            </div>
-                        </form>
-                    {% endif %}
+                        {% if not logged_in %}
+                            <form action="{% url 'listing' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-success btn-sm btn-block" type="submit" value="Add to Watchlist">
+                            </form>
+                        {% else %}
+                            <a href="{% url 'edit_watchlist' listing.id %}">
+                                {% if watcher_exists %}
+                                <div style="margin-bottom: 5px;">
+                                    <input class="btn btn-outline-dark btn-sm btn-block" type="submit" value="Remove from Watchlist">
+                                </div>
+                                {% else %}
+                                <div style="margin-bottom: 5px;">
+                                    <input class="btn btn-outline-success btn-sm btn-block" type="submit" value="Add to Watchlist">
+                                </div>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+
+                        {% if user == listing.creator %}
+                            <!-- add option for creator to edit title description price or photo. -->
+                            <form action="{% url 'winner' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <input class="btn btn-outline-danger btn-sm btn-block" type="submit" value="Close Auction">
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
-            <form action="{% url 'listing' listing.id %}" method="post">
-                {% csrf_token %}
-                <div style="margin-bottom: 5px;">
-                    {{ comment_form.comment }}
-                </div>
-                <div style="margin-bottom: 5px; text-align: right;">
-                    <input class="btn btn-outline-primary btn-sm" type="submit" value="Comment">
-                </div>
-            </form>
-
-
-            <h3>All Comments</h3>
-
-            {% if comments %}
-                {% for comment in comments %}
-                    <div class="card" style="border: none;">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">{{ comment.user }}</h6>
-                            <p class="card-text">{{ comment }}</p>
-                        </div>
+        <div class="row">
+            <div class="col">
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 5px;">
+                        {{ comment_form.comment }}
                     </div>
-                {% endfor %}
-            {% else %}
-                No comments.
-            {% endif %}
+                    <div style="margin-bottom: 5px; text-align: right;">
+                        <input class="btn btn-outline-primary btn-sm" type="submit" value="Comment">
+                    </div>
+                </form>
+
+
+                <h3>All Comments</h3>
+
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="card" style="border: none;">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">{{ comment.user }}</h6>
+                                <p class="card-text">{{ comment }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    No comments.
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

@@ -34,7 +34,7 @@ class Listing(models.Model):
     top_bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder", blank=True, null=True)
     status = models.BooleanField(default=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True, null=True)
-    watchers = models.ManyToManyField(User, blank=True)
+    watchers = models.ManyToManyField(User, blank=True, related_name="watchlist")
 
     def __str__(self):
         return f"{self.title}"
