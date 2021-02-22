@@ -93,13 +93,16 @@
                         {% endif %}
 
                         {% if user == listing.creator %}
-                            <!-- add option for creator to edit title description price or photo. -->
+                            {% if winner is not None %}
                             <form action="{% url 'winner' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <div>
                                     <input class="btn btn-outline-danger btn-sm btn-block" type="submit" value="Close Auction">
                                 </div>
                             </form>
+                            {% endif %}
+                            <!-- add option for creator to edit title description price or photo. -->
+
                         {% endif %}
                     </div>
                 </div>

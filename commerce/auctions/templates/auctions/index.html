@@ -17,26 +17,28 @@
 
     <div class="row">
         {% for listing in listings %}
-            <div class="col-lg-2 col-md-3 col-sm-4">
-                <div class="card h-100">
-                    <a href="listing/{{ listing.id }}">
-                        <img src="{{ listing.image.url }}" class="card-img-top">
-                    </a>
-                    <div class="card-body">
-                        <a href="listing/{{ listing.id }}" style="color: black;">
-                            <h5 class="card-title">{{ listing }}</h5>
+            {% if listing.status %}
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="card h-100">
+                        <a href="listing/{{ listing.id }}">
+                            <img src="{{ listing.image.url }}" class="card-img-top">
                         </a>
-                        <h6 class="card-subtitle mb-3">
-                            {% if listing.current_bid is None %}
-                                ${{ listing.starting_bid|intcomma }}
-                            {% else %}
-                                ${{ listing.current_bid|intcomma }}
-                            {% endif %}
-                        </h6>
-                        <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+                        <div class="card-body">
+                            <a href="listing/{{ listing.id }}" style="color: black;">
+                                <h5 class="card-title">{{ listing }}</h5>
+                            </a>
+                            <h6 class="card-subtitle mb-3">
+                                {% if listing.current_bid is None %}
+                                    ${{ listing.starting_bid|intcomma }}
+                                {% else %}
+                                    ${{ listing.current_bid|intcomma }}
+                                {% endif %}
+                            </h6>
+                            <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 
