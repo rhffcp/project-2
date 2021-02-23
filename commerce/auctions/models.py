@@ -22,22 +22,6 @@ class User(AbstractUser):
 
 # Model for each item listing.
 class Listing(models.Model):
-    # categories = [
-    #     ('a', 'Books'),
-    #     ('b', 'Children'),
-    #     ('c', 'Clothing'),
-    #     ('d', 'Decoration'),
-    #     ('e', 'Electronics'),
-    #     ('f', 'Furniture'),
-    #     ('g', 'Kitchen'),
-    #     ('h', 'Music/Arts'),
-    #     ('i', 'Office'),
-    #     ('j', 'Services'),
-    #     ('k', 'Tools'),
-    #     ('l', 'Vehicles'),
-    #     ('m', 'Other')
-    # ]
-
     # creation_date = models.DateTimeField(null=True)
     title = models.CharField(max_length=100)
     # Images are uploaded to 'media/images/' directory path within project.
@@ -66,6 +50,3 @@ class Comment(models.Model):
     comment = models.CharField(max_length=300)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null=True, related_name="comments")
     # date = models.DateTimeField()
-
-    def __str__(self):
-        return f"{self.comment}"
