@@ -50,3 +50,6 @@ class Comment(models.Model):
     comment = models.CharField(max_length=300)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null=True, related_name="comments")
     # date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.comment}"

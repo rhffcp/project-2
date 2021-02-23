@@ -98,6 +98,8 @@ def register(request):
 
 
 def create(request):
+    create_success = False
+
     if request.method == "POST":
 
         # Get form and file data and place it inside form variable.
@@ -108,10 +110,12 @@ def create(request):
             creation = form.save()
             creation.creator = request.user
             creation.save()
+            create_success = True
             # go to listing page or creation success alert
 
     return render(request, "auctions/create.html", {
-        "form": ListingForm()
+        "form": ListingForm(),
+        "create_success": create_success
     })
 
 
