@@ -190,7 +190,7 @@ def listing(request, listing_id):
         "winner": winner,
         "comment_form": CommentForm(),
         "comments": listing.comments.all(),
-        "access_error": access_error,
+        "access_error": access_error
     })
 
 
