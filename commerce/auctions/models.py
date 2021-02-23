@@ -1,27 +1,42 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+CATEGORIES = [
+    ('a', 'Books'),
+    ('b', 'Children'),
+    ('c', 'Clothing'),
+    ('d', 'Decoration'),
+    ('e', 'Electronics'),
+    ('f', 'Furniture'),
+    ('g', 'Kitchen'),
+    ('h', 'Music/Arts'),
+    ('i', 'Office'),
+    ('j', 'Services'),
+    ('k', 'Tools'),
+    ('l', 'Vehicles'),
+    ('m', 'Other')
+]
 
 class User(AbstractUser):
     pass
 
 # Model for each item listing.
 class Listing(models.Model):
-    categories = [
-        ('a', 'Books'),
-        ('b', 'Children'),
-        ('c', 'Clothing'),
-        ('d', 'Decoration'),
-        ('e', 'Electronics'),
-        ('f', 'Furniture'),
-        ('g', 'Kitchen'),
-        ('h', 'Music/Arts'),
-        ('i', 'Office'),
-        ('j', 'Services'),
-        ('k', 'Tools'),
-        ('l', 'Vehicles'),
-        ('m', 'Other')
-    ]
+    # categories = [
+    #     ('a', 'Books'),
+    #     ('b', 'Children'),
+    #     ('c', 'Clothing'),
+    #     ('d', 'Decoration'),
+    #     ('e', 'Electronics'),
+    #     ('f', 'Furniture'),
+    #     ('g', 'Kitchen'),
+    #     ('h', 'Music/Arts'),
+    #     ('i', 'Office'),
+    #     ('j', 'Services'),
+    #     ('k', 'Tools'),
+    #     ('l', 'Vehicles'),
+    #     ('m', 'Other')
+    # ]
 
     # creation_date = models.DateTimeField(null=True)
     title = models.CharField(max_length=100)
@@ -30,7 +45,7 @@ class Listing(models.Model):
     description = models.CharField(max_length=300)
     starting_bid = models.FloatField()
     current_bid = models.FloatField(blank=True, null=True)
-    category = models.CharField(choices=categories, max_length=1, null=True)
+    category = models.CharField(choices=CATEGORIES, max_length=1, null=True)
     top_bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder", blank=True, null=True)
     status = models.BooleanField(default=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True, null=True)
