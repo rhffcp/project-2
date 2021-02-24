@@ -1,39 +1,53 @@
 {% extends "auctions/layout.html" %}
-<!-- if no listing in categories, display alert -->
+{% load humanize %}
+
 {% block body %}
-<style>
-    img {
-        height: 150px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-</style>
+<!-- Displays active listings for a category. -->
 
-{% for listing in listings %}
-{% if listing.status is not False %}
-<div class="card mb-3">
-    <div class="row">
-        <div class="col-md-4">
-            <a href="{% url 'listing' listing.id %}">
-                <img src="{{ listing.image.url }}">
-            </a>
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <a href="{% url 'listing' listing.id %}" style="color: black;">
-                    <h5 class="card-title">{{ listing }}</h5>
-                </a>
-                <p class="card-text">{{ listing.description }}</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <style>
+        img {
+            height: 150px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+    <title>
+        {% block title %}
+            {{ cat_value }}
+        {% endblock %}
+    </title>
+
+    <h2>{{ cat_value }}</h2>
+
+    {% for listing in listings %}
+        {% if listing.status %}
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{% url 'listing' listing.id %}">
+                            <img src="{{ listing.image.url }}">
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a href="{% url 'listing' listing.id %}" style="color: black;">
+                                <h5 class="card-title">{{ listing }}</h5>
+                            </a>
+                            <h6 class="card-subtitle mb-3">
+                                {% if listing.current_bid is None %}
+                                    ${{ listing.starting_bid|intcomma }}
+                                {% else %}
+                                    ${{ listing.current_bid|intcomma }}
+                                {% endif %}
+                            </h6>
+                            <p class="card-text" style="font-size: 14px;">{{ listing.description }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-
-
-{% endfor %}
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}

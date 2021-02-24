@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django.contrib.humanize', # Useful for human touch features like adding commas after every three digits.
+    'django.contrib.humanize', # For human friendly display features.
     'django_cleanup', # From 'pip install django-cleanup' - removes media files when models are deleted.
 ]
 
@@ -124,7 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# research below
-MEDIA_URL = '/media/'
-
+# Create media/ path within project.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Access files within media/ path.
+MEDIA_URL = '/media/'

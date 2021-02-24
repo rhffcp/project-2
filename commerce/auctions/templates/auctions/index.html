@@ -2,6 +2,8 @@
 {% load humanize %}
 
 {% block body %}
+<!-- Displays all active listings. -->
+
     <style>
         .card {
             border: none;
@@ -12,6 +14,12 @@
             object-fit: contain;
         }
     </style>
+
+    <title>
+        {% block title %}
+            Active Listings
+        {% endblock %}
+    </title>
 
     <h2>Active Listings</h2>
 
@@ -41,6 +49,5 @@
             {% endif %}
         {% endfor %}
     </div>
-
 
 {% endblock %}

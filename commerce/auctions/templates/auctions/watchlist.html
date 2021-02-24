@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
+{% load humanize %}
+
 
 {% block body %}
+<!-- Displays user watchlist. -->
+
     <style>
         img {
             height: 150px;
@@ -9,6 +13,14 @@
             margin-right: auto;
         }
     </style>
+
+    <title>
+        {% block title %}
+            Watchlist
+        {% endblock %}
+    </title>
+
+    <h2>Watchlist</h2>
 
     {% for listing in listings %}
         <div class="card mb-3">
@@ -23,11 +35,18 @@
                         <a href="listing/{{ listing.id }}" style="color: black;">
                             <h5 class="card-title">{{ listing }}</h5>
                         </a>
+                        <h6 class="card-subtitle mb-3">
+                            {% if listing.current_bid is None %}
+                                ${{ listing.starting_bid|intcomma }}
+                            {% else %}
+                                ${{ listing.current_bid|intcomma }}
+                            {% endif %}
+                        </h6>
                         <p class="card-text">{{ listing.description }}</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
+    
 {% endblock %}

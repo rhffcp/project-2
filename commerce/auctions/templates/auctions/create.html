@@ -1,11 +1,19 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<!-- Page for creating new listing. -->
+
     <style>
         form > div {
             margin-bottom: 10px;
         }
     </style>
+
+    <title>
+        {% block title %}
+            New Listing
+        {% endblock %}
+    </title>
 
     {% if create_success %}
         <div class="alert alert-success" role="alert">
@@ -39,4 +47,5 @@
             </div>
         </form>
     </div>
+
 {% endblock %}

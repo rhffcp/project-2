@@ -2,6 +2,7 @@
 {% load humanize %}
 
 {% block body %}
+<!-- Displays listing page. -->
 
     <style>
         img {
@@ -9,13 +10,18 @@
         }
         .row > div {
             padding: 20px;
-            /* border: 2px solid black; */
         }
     </style>
 
+    <title>
+        {% block title %}
+            {{ listing.title }}
+        {% endblock %}
+    </title>
+
+    <!-- Alerts for inactive listings. -->
     {% if listing.status == False %}
         {% if user != winner and winner != "None" %}
-            <!-- add option for deleting listing if user is creator. -->
             <div class="alert alert-info" role="alert">
                 Listing closed. User "{{ winner }}" is the winner.
             </div>
@@ -30,17 +36,18 @@
         {% endif %}
     {% endif %}
 
+    <!-- Alerts for bid inputs. -->
     {% if bid_error %}
         <div class="alert alert-danger" role="alert">
             ERROR: Bid must be greater than current price.
         </div>
     {% elif bid_placed %}
-        <!-- add option for user to undo their bid. in a view use listing.current_bid = Bid.objects.filter(listing=listing).last().new_bid -->
         <div class="alert alert-warning" role="alert">
             Your bid is now the current price!
         </div>
     {% endif %}
 
+    <!-- Error for non-users. -->
     {% if access_error %}
         <div class="alert alert-danger" role="alert">
             ERROR: You must be logged in to access this feature.
@@ -48,6 +55,8 @@
     {% endif %}
 
     <h2>{{ listing.title }}</h2>
+
+    <!-- get_<object_name>_display retrieves the second tuple value from choices. -->
     <h6 style="font-weight: 300;">{{ listing.get_category_display }}</h6>
 
     <div class="container">
@@ -58,6 +67,8 @@
             <div class="col-lg-4">
                 <div class="card h-100">
                     <div class="card-body">
+
+                        <!-- Price. -->
                         <h5 class="card-title">
                             {% if listing.current_bid is None %}
                                 ${{ listing.starting_bid|intcomma }}
@@ -66,8 +77,10 @@
                             {% endif %}
                         </h5>
 
+                        <!-- Description. -->
                         <p class="card-text">{{ listing.description }}</p>
 
+                        <!-- Bid form. -->
                         <form action="{% url 'listing' listing.id %}" method="post">
                             {% csrf_token %}
                             <div style="margin-bottom: 5px;">
@@ -78,6 +91,7 @@
                             </div>
                         </form>
 
+                        <!-- Watchlist form. -->
                         {% if not logged_in %}
                             <form action="{% url 'listing' listing.id %}" method="post">
                                 {% csrf_token %}
@@ -97,6 +111,7 @@
                             </a>
                         {% endif %}
 
+                        <!-- Close auction. -->
                         {% if user == listing.creator %}
                             <form action="{% url 'winner' listing.id %}" method="post">
                                 {% csrf_token %}
@@ -104,14 +119,13 @@
                                     <input class="btn btn-outline-danger btn-sm btn-block" type="submit" value="Close Auction">
                                 </div>
                             </form>
-                            <!-- add option for creator to edit title description price or photo. -->
-
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Comment form. -->
         <div class="row">
             <div class="col">
                 <form action="{% url 'listing' listing.id %}" method="post">
@@ -127,7 +141,7 @@
 
                 <h3>All Comments</h3>
 
-                <!-- Add option to delete comments if user is signed in. -->
+                <!-- Lists all comments and usernames. -->
                 {% if comments %}
                     {% for comment in comments %}
                         <div class="card" style="border: none;">
