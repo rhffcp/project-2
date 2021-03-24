@@ -2,19 +2,20 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 CATEGORIES = [
-    ('a', 'Books'),
-    ('b', 'Children'),
-    ('c', 'Clothing'),
-    ('d', 'Decoration'),
-    ('e', 'Electronics'),
-    ('f', 'Furniture'),
-    ('g', 'Kitchen'),
-    ('h', 'Music/Arts'),
-    ('i', 'Office'),
-    ('j', 'Services'),
-    ('k', 'Tools'),
-    ('l', 'Vehicles'),
-    ('m', 'Other')
+    ('a', 'Beauty'),
+    ('b', 'Books'),
+    ('c', 'Children'),
+    ('d', 'Clothing'),
+    ('e', 'Decoration'),
+    ('f', 'Electronics'),
+    ('g', 'Furniture'),
+    ('h', 'Kitchen'),
+    ('i', 'Music/Arts'),
+    ('j', 'Office'),
+    ('k', 'Services'),
+    ('l', 'Tools'),
+    ('m', 'Vehicles'),
+    ('n', 'Other')
 ]
 
 
