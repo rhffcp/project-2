@@ -9,11 +9,11 @@
 
 
 ## Description
-This project uses HTML, CSS, Django + Django models to create an online commerce app where users are able to create, view, comment, and bid on auction listings. It follows all the specifications of [CS50W's Commerce](https://cs50.harvard.edu/web/2020/projects/2/commerce/) project, plus additional customization.
+This project uses HTML, CSS, and Django + Django models to create an online commerce app where users are able to create, view, comment, and bid on auction listings. It follows all the requirements of [CS50W's Commerce](https://cs50.harvard.edu/web/2020/projects/2/commerce/) project, plus additional customization.
 
-- Users are able to create an account, sign in, and start bidding on active listings or create their own. Sellers are also able to close auctions, thereby displaying the highest bidder as the winner and rendering the listing as inactive.
+- Users are able to create an account, sign in, and start bidding on active listings or create their own. Sellers are able to close auctions, thereby displaying the highest bidder as the winner and rendering the listing as inactive.
 
-- When creating an entry, users can upload a photo image and select a category to choose from.
+- When creating an entry, users can upload an image and select a category to choose from.
 
 - Users should be able to add or remove items to their watchlist. 
 
@@ -29,7 +29,7 @@ This project utilizes the [Django](https://www.djangoproject.com/download/) fram
 It also utlizes the [django_cleanup](https://pypi.org/project/django-cleanup/) package to remove image files from the media directory when a listing object is deleted via the Django admin portal. 
 
 ```
-pip install django-cleanup
+$ pip install django-cleanup
 ```
 
 ## Running
