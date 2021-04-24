@@ -9,7 +9,7 @@
 
 
 ## Description
-This project uses HTML, CSS, and Django + Django models to create an online commerce app where users are able to create, view, comment, and bid on auction listings. It follows all the requirements of [CS50W's Commerce](https://cs50.harvard.edu/web/2020/projects/2/commerce/) project, plus additional customization.
+This project uses HTML, CSS, and Django + Django models to create an online commerce app where users are able to create, view, comment, and bid on auction listings.
 
 - Users are able to create an account, sign in, and start bidding on active listings or create their own. Sellers are able to close auctions, thereby displaying the highest bidder as the winner and rendering the listing as inactive.
 
